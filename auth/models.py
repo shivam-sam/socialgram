@@ -1,8 +1,10 @@
 from sqlalchemy import Column, Date, DateTime, Integer, String, Enum
 from datetime import datetime
+from sqlalchemy.orm import relationship
 
 from .enums import Gender
 from src.database import Base
+from post.models import post_likes
 
 
 class User(Base):
@@ -20,3 +22,7 @@ class User(Base):
     profile_pic = Column(String)            # Stores the link to the stored profile pic (S3, Server, Cloud)
     bio = Column(String)
     location = Column(String)
+
+    posts = relationship("post.models.Post", back_populates="author")
+    liked_posts = relationship("post.models.Post", secondary=post_likes, back_populates="liked_by_users")
+
